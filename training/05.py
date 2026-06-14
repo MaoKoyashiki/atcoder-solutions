@@ -73,4 +73,52 @@ for n in range(1, N):
 for i in range(N):
   print(dp[i][W])
 
+# 5.3
+# 部分和問題
+A = [1, 7, 3, 5, 2]
+N = len(A)
+W = 15
+dp = [[False for _ in range(W+1)] for _ in range(N)]
+for i in range(N):
+  dp[i][0] = True
+# --- n=0 (最初の要素) の初期化 ---
+if A[0] <= W:
+    dp[0][A[0]] = True
+# --- n=1 (2番目の要素) 以降のループ ---
+for n in range(1, N):
+  for w in range(W+1):
+    # 1. まず「選ばない場合」の結果をそのまま引き継ぐ
+    dp[n][w] = dp[n-1][w]
+    # 2. 「選ぶ場合」のチェック（w が A[n] 以上のときだけ引ける）
+    if w >= A[n]:
+      # すでに True ならそのまま、False なら「A[n]を足す前の状態」を引き継ぐ
+      dp[n][w] = dp[n][w] or dp[n-1][w - A[n]]
+l = []
+for i in range(1, W+1):
+    if dp[-1][i]:
+        l.append(i)
+print(*l)
+
+# 5.4
+A = [1, 7, 3, 5, 2]
+N = len(A)
+W = 15
+dp = [[False for _ in range(W+1)] for _ in range(N)]
+for i in range(N):
+  dp[i][0] = True
+# --- n=0 (最初の要素) の初期化 ---
+if A[0] <= W:
+    dp[0][A[0]] = True
+# --- n=1 (2番目の要素) 以降のループ ---
+for n in range(1, N):
+  for w in range(W+1):
+    # 1. まず「選ばない場合」の結果をそのまま引き継ぐ
+    dp[n][w] = dp[n-1][w]
+    # 2. 「選ぶ場合」のチェック（w が A[n] 以上のときだけ引ける）
+    if w >= A[n]:
+      # すでに True ならそのまま、False なら「A[n]を足す前の状態」を引き継ぐ
+      dp[n][w] = dp[n][w] or dp[n-1][w - A[n]]
+for i in range(N):
+  print(dp[i][W])
+
   
