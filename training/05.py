@@ -121,4 +121,66 @@ for n in range(1, N):
 for i in range(N):
   print(dp[i][W])
 
-  
+# 5.5 
+# 個数制限なし部分和問題
+# A
+A = [1, 7, 3, 5, 2]
+W = 15
+
+# dp[w]: 和 w を作れるか (True/False)
+# 初期化: 全てFalseにし、0だけTrueにする
+dp = [False] * (W + 1)
+dp[0] = True
+
+# 各数字について、作れる重さを更新していく
+for a in A:
+    # 個数制限「なし」なので、前から順番に更新する
+    for w in range(a, W + 1):
+        if dp[w - a]:
+            dp[w] = True
+
+print(dp[W]) # 出力: True
+
+# B
+A = [1, 7, 3, 5, 2]
+N = len(A)
+W = 15
+
+# dp[i][w]: i番目までの数字を使って和wを作れるか
+# ※ インデックスの混乱を避けるため、N+1 行用意するのがセオリーです
+dp = [[False] * (W + 1) for _ in range(N + 1)]
+dp[0][0] = True
+
+for i in range(N):
+    for w in range(W + 1):
+        # 1. i番目の数字を使わない場合（上の行の結果をそのまま引き継ぐ）
+        if dp[i][w]:
+            dp[i+1][w] = True
+        
+        # 2. i番目の数字を使う場合（左側の結果から引き継ぐ）
+        # ※ 個数制限なしなので、同じ行 (i+1) の dp[i+1][w - A[i]] を見る
+        if w >= A[i] and dp[i+1][w - A[i]]:
+            dp[i+1][w] = True
+
+print(dp[N][W]) # 出力: True
+
+# 5.6
+A = [1, 7, 3, 5, 2]
+M = [1, 2, 3, 2, 1]
+W = 15
+
+dp = [False] * (W + 1)
+dp[0] = True
+
+for i in range(len(A)):
+    # count[w]: 重さ w を作るために、A[i] を何個使ったか
+    count = [0] * (W + 1)
+    
+    for w in range(A[i], W + 1):
+        # 1つ手前の状態 (w - A[i]) が作れて、かつ、まだ A[i] を使う余裕がある場合
+        if dp[w - A[i]] and not dp[w]:
+            if count[w - A[i]] < M[i]:
+                dp[w] = True
+                count[w] = count[w - A[i]] + 1
+
+print(dp[W])  # 出力: True

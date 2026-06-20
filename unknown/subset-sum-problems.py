@@ -10,7 +10,7 @@ a = [1, 2, 4, 5, 11]
 
 flag = False
 def solve():
-	for i in range(1 << N): #2^N
+	for i in range(1 << N): # 2^N
 		sum = 0
 		for j in range(N): # N
 			if i & (1 << j):
